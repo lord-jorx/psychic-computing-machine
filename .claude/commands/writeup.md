@@ -16,7 +16,7 @@ Se espera `workspace=<ruta>` y opcionalmente la plantilla (`elsarticle` para Els
 
 3. **Cada cifra numérica que escribas necesita su `\provenance{claim_id}`.** Inmediatamente después de escribir una cifra, registra su origen:
    ```bash
-   python -m freemdlabor integrity add-provenance --workspace <workspace> \
+   python -m jordilabor integrity add-provenance --workspace <workspace> \
      --claim-id <id_corto_descriptivo> --value "<lo que escribiste>" \
      --source-table analysis --source-ref "results_<outcome>.json:<campo>"
    ```
@@ -26,12 +26,12 @@ Se espera `workspace=<ruta>` y opcionalmente la plantilla (`elsarticle` para Els
 
 5. Compila y verifica antes de decir que está listo:
    ```bash
-   python -m freemdlabor integrity resolve-citations --bib <workspace>/manuscript/references.bib
-   python -m freemdlabor integrity check-provenance   --workspace <workspace> --manuscript <workspace>/manuscript/main.tex
+   python -m jordilabor integrity resolve-citations --bib <workspace>/manuscript/references.bib
+   python -m jordilabor integrity check-provenance   --workspace <workspace> --manuscript <workspace>/manuscript/main.tex
    ```
    Si cualquiera de los dos falla, el manuscrito no está terminado — arréglalo, no lo reportes como "listo con advertencias".
 
 6. No apruebes G5 tú. Preséntale al usuario el manuscrito, el checklist de cumplimiento y los resultados de integridad, y pide su aprobación explícita antes de:
    ```bash
-   python -m freemdlabor gate approve G5 <workspace>/manuscript/main.tex --workspace <workspace> --by "<nombre>"
+   python -m jordilabor gate approve G5 <workspace>/manuscript/main.tex --workspace <workspace> --by "<nombre>"
    ```

@@ -2,13 +2,13 @@ Ayuda al usuario a redactar el protocolo de una revisión sistemática/metaanál
 
 ## Argumentos: $ARGUMENTS
 
-Se espera: `workspace=<ruta>` (p. ej. `results/2026-lap-vs-open-appy`) y, si el usuario ya lo dio en el chat, la pregunta clínica en bruto.
+Se espera: `workspace=<ruta>` (p. ej. `results/2026-tapp-vs-lichtenstein`) y, si el usuario ya lo dio en el chat, la pregunta clínica en bruto.
 
 ## Pasos
 
 1. Si el workspace no existe todavía, créalo:
    ```bash
-   python -m freemdlabor init <workspace>
+   python -m jordilabor init <workspace>
    ```
 
 2. Lee `<workspace>/protocol.md`. Si está vacío (plantilla), guía al usuario con preguntas concretas — no rellenes tú los criterios por tu cuenta:
@@ -23,7 +23,7 @@ Se espera: `workspace=<ruta>` (p. ej. `results/2026-lap-vs-open-appy`) y, si el 
 
 5. Antes de cerrar, léeselo de vuelta al usuario en un resumen corto y pregúntale explícitamente si lo aprueba. Solo entonces:
    ```bash
-   python -m freemdlabor gate approve G1 <workspace>/protocol.md --workspace <workspace> --by "<nombre que te dé el usuario>"
+   python -m jordilabor gate approve G1 <workspace>/protocol.md --workspace <workspace> --by "<nombre que te dé el usuario>"
    ```
    No apruebes G1 sin que el usuario lo haya confirmado en esta conversación.
 

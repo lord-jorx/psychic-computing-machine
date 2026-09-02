@@ -20,6 +20,6 @@ Se espera `workspace=<ruta>` y el/los `--outcome` ya analizados en R.
 
 5. Cuando el usuario esté de acuerdo con la interpretación, ayúdale a redactar la sección de Discusión con esa interpretación exacta (ver `.claude/commands/writeup.md` para el resto del manuscrito), y aprueba:
    ```bash
-   python -m freemdlabor gate approve G4 <workspace>/analysis/results_<outcome>.json --workspace <workspace> --by "<nombre>"
+   python -m jordilabor gate approve G4 <workspace>/analysis/results_<outcome>.json --workspace <workspace> --by "<nombre>"
    ```
    (repite por cada desenlace principal si aplica, o aprueba sobre el fichero de resultados del desenlace primario si es el que gobierna la conclusión central).

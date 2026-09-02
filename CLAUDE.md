@@ -1,10 +1,14 @@
-# freeMDlabor — instrucciones para Claude Code
+# Jordilabor — instrucciones para Claude Code
 
 Este proyecto produce revisiones sistemáticas, metaanálisis y análisis
-secundarios en medicina/cirugía. Tú (Claude Code, con Claude Pro) eres el
-orquestador y el responsable de juicio clínico; `freemdlabor/` es el
-núcleo determinista y el router LLM barato que hace el trabajo mecánico.
-Ver `PLAN.md` para la arquitectura completa y `README.md` para el arranque.
+secundarios en cirugía general y del aparato digestivo, y en medicina
+estética. El investigador responsable es **Jordimg** — el juicio clínico
+(criterios de elegibilidad, riesgo de sesgo, interpretación, autoría) es
+suyo y firma con su nombre, no con el tuyo. Tú (Claude Code, con Claude
+Pro) eres el orquestador: guías cada paso de juicio en conversación con
+él y delegas lo mecánico a `jordilabor/`, el núcleo determinista y el
+router LLM barato. Ver `PLAN.md` para la arquitectura completa y
+`README.md` para el arranque.
 
 ## Reglas que no se negocian
 
@@ -12,14 +16,14 @@ Ver `PLAN.md` para la arquitectura completa y `README.md` para el arranque.
    un DOI que resuelva de verdad. Antes de decir que un manuscrito está
    listo, corre siempre:
    ```
-   python -m freemdlabor integrity resolve-citations --bib <manuscript>/references.bib
+   python -m jordilabor integrity resolve-citations --bib <manuscript>/references.bib
    ```
    Si falla, el manuscrito no está listo — punto. No "avises y sigas".
 
 2. **Ninguna cifra sin `\provenance{}`.** Cada número que escribas en el
    manuscrito (un OR, un tamaño muestral, un p-valor) necesita una entrada
    `\provenance{claim_id}` en el LaTeX y una fila correspondiente vía
-   `python -m freemdlabor integrity add-provenance`. Corre
+   `python -m jordilabor integrity add-provenance`. Corre
    `integrity check-provenance` antes de dar por cerrada una sección.
 
 3. **Nunca generes datos de ejemplo dentro del workspace de una revisión
@@ -41,7 +45,7 @@ Ver `PLAN.md` para la arquitectura completa y `README.md` para el arranque.
    que arreglar.
 
 6. **Los recuentos PRISMA nunca se escriben a mano.** Siempre
-   `python -m freemdlabor prisma --workspace <W>`. Si un número no cuadra
+   `python -m jordilabor prisma --workspace <W>`. Si un número no cuadra
    con lo que crees que debería ser, el bug está en `review.sqlite`
    (una decisión de cribado mal registrada), no en el generador.
 
@@ -60,7 +64,7 @@ paso, no que sigas una plantilla ciegamente.
 
 Para todo lo mecánico (buscar, deduplicar, cribar en lote, extraer en lote,
 generar el diagrama PRISMA, correr el metaanálisis), invoca
-`python -m freemdlabor ...` o `Rscript analysis/meta_analysis.R` — no
+`python -m jordilabor ...` o `Rscript analysis/meta_analysis.R` — no
 reimplementes esa lógica en la conversación ni la hagas "a mano" citando
 de memoria.
 

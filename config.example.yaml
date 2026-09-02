@@ -1,4 +1,4 @@
-# freeMDlabor — per-role model routing.
+# jordilabor — per-role model routing.
 #
 # Copy to config.yaml (per-workspace, or at repo root as the default) and
 # adjust. See PLAN.md §3 for the reasoning behind this split, and

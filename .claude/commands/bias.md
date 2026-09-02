@@ -16,7 +16,7 @@ Se espera `workspace=<ruta>` y, si el usuario ya lo dijo, qué herramienta aplic
 
 3. Registra cada dominio:
    ```bash
-   python -m freemdlabor bias add --workspace <workspace> --record-id <id> \
+   python -m jordilabor bias add --workspace <workspace> --record-id <id> \
      --tool RoB2 --domain "randomization_process" --judgment low \
      --justification "..." --quote "<cita textual del artículo>" --by "claude-code"
    ```
@@ -24,7 +24,7 @@ Se espera `workspace=<ruta>` y, si el usuario ya lo dijo, qué herramienta aplic
 
 4. Cuando termines todos los estudios, exporta:
    ```bash
-   python -m freemdlabor bias export --workspace <workspace>
+   python -m jordilabor bias export --workspace <workspace>
    ```
 
 5. Resume para el usuario: ¿hay algún estudio con riesgo global "alto/crítico" que convenga excluir de un análisis de sensibilidad? Coméntalo antes de pasar al metaanálisis — no lo decidas por tu cuenta.

@@ -1,10 +1,11 @@
-# freeMDlabor — Plan de adaptación de `freephdlabor` a investigación médico-quirúrgica
+# Jordilabor — Plan de adaptación de `freephdlabor` a investigación médico-quirúrgica
 
 > Estado: **implementado — núcleo determinista de la Vía A (F0-F1 y parte de F2 del §10)**.
+> Autor/investigador responsable: **Jordimg** (cirugía general y del aparato digestivo; también medicina estética).
 > Base auditada: [`ltjed/freephdlabor`](https://github.com/ltjed/freephdlabor) @ `main` (clonado y revisado fichero a fichero).
 > Restricción de partida: ejecutable con **cuenta Claude Pro** o con **APIs gratuitas**.
 > Versión navegable: https://claude.ai/code/artifact/9d079ec0-5c0c-4b41-b49f-78e43474775d
-> Código: [`freemdlabor/`](freemdlabor/) (paquete Python), [`analysis/meta_analysis.R`](analysis/meta_analysis.R), [`.claude/commands/`](.claude/commands/) — ver [`README.md`](README.md) para el arranque.
+> Código: [`jordilabor/`](jordilabor/) (paquete Python), [`analysis/meta_analysis.R`](analysis/meta_analysis.R), [`.claude/commands/`](.claude/commands/) — ver [`README.md`](README.md) para el arranque.
 
 ---
 
@@ -165,7 +166,7 @@ Gateway).
 ### 5.3 El workspace es el contrato
 
 ```
-results/2026-09-02_lap-vs-open-appy/
+results/2026-09-02_tapp-vs-lichtenstein/
 ├── protocol.md            # PICO, criterios, plan de análisis — congelado tras la puerta G1
 ├── review.sqlite          # fuente única: registros, decisiones, extracciones, sesgo
 ├── search/

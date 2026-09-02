@@ -8,7 +8,7 @@ Se espera `workspace=<ruta>`.
 
 1. Exporta el CSV actual de estudios:
    ```bash
-   python -m freemdlabor extract export --workspace <workspace>
+   python -m jordilabor extract export --workspace <workspace>
    ```
 
 2. Cuenta cuántas celdas hay en total (nº de estudios incluidos × nº de campos del esquema) y calcula el 20% — ese es el número mínimo de celdas a verificar. Prioriza los desenlaces primarios sobre las variables descriptivas.
@@ -22,12 +22,12 @@ Se espera `workspace=<ruta>`.
 
 4. Marca cada celda verificada:
    ```bash
-   python -m freemdlabor extract verify --workspace <workspace> --record-id <id> --field <campo> --by "<nombre>"
+   python -m jordilabor extract verify --workspace <workspace> --record-id <id> --field <campo> --by "<nombre>"
    ```
 
 5. Si encuentras más de 1-2 errores en la muestra del 20%, dilo explícitamente: probablemente haga falta re-extraer con un modelo distinto o revisar el prompt, no seguir adelante con el resto sin verificar.
 
 6. Cuando la muestra esté verificada y el usuario esté conforme:
    ```bash
-   python -m freemdlabor gate approve G3 <workspace>/extraction/studies.csv --workspace <workspace> --by "<nombre>"
+   python -m jordilabor gate approve G3 <workspace>/extraction/studies.csv --workspace <workspace> --by "<nombre>"
    ```

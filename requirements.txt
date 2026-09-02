@@ -1,4 +1,4 @@
-# freeMDlabor — deterministic core + LLM-router dependencies.
+# jordilabor — deterministic core + LLM-router dependencies.
 # No torch, no CUDA, no AI-Scientist-v2: install finishes in seconds, not
 # the tens of GB that freephdlabor's environment.yml pulled in.
 

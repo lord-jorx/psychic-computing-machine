@@ -1,9 +1,11 @@
-# freeMDlabor
+# Jordilabor
 
 Herramientas deterministas + un router LLM barato para producir revisiones
-sistemáticas, metaanálisis y análisis secundarios en medicina y cirugía,
-orquestadas desde Claude Code (Vía A del plan). Ver [`PLAN.md`](PLAN.md)
-para el razonamiento completo; este README es solo el arranque práctico.
+sistemáticas, metaanálisis y análisis secundarios en cirugía general y del
+aparato digestivo (y en medicina estética, donde aplique el mismo esquema
+PICO/PRISMA). Mantenido por Jordimg. Orquestado desde Claude Code (Vía A
+del plan) — ver [`PLAN.md`](PLAN.md) para el razonamiento completo; este
+README es solo el arranque práctico.
 
 No es un framework multiagente. La orquestación eres tú, dentro de Claude
 Code, invocando estos comandos o los slash commands de `.claude/commands/`.
@@ -29,7 +31,7 @@ install.packages(c("metafor", "jsonlite"))
 ## Arranque de una revisión
 
 ```bash
-python -m freemdlabor init results/2026-lap-vs-open-appy
+python -m jordilabor init results/2026-tapp-vs-lichtenstein
 ```
 
 Esto crea `protocol.md` (plantilla PICO), `review.sqlite`, y las carpetas
@@ -42,7 +44,7 @@ cribado se enruta contra este fichero.
 ### G1 — puerta de protocolo
 
 ```bash
-python -m freemdlabor gate approve G1 $W/protocol.md --workspace $W --by "tu nombre"
+python -m jordilabor gate approve G1 $W/protocol.md --workspace $W --by "Jordimg"
 ```
 
 Sin esto, nada del pipeline avanza (aunque nada te lo impide técnicamente
@@ -53,61 +55,61 @@ de ficheros).
 ## Pipeline
 
 ```bash
-W=results/2026-lap-vs-open-appy
+W=results/2026-tapp-vs-lichtenstein
 
 # 1. Búsqueda multibase (sin claves, salvo NCBI_API_KEY opcional)
-python -m freemdlabor search --workspace $W --source pubmed        --query "laparoscopic appendectomy AND open appendectomy AND randomized"
-python -m freemdlabor search --workspace $W --source europepmc     --query "laparoscopic appendectomy open appendectomy"
-python -m freemdlabor search --workspace $W --source clinicaltrials --query "appendectomy laparoscopic"
-python -m freemdlabor search --workspace $W --source openalex      --query "laparoscopic vs open appendectomy"
+python -m jordilabor search --workspace $W --source pubmed        --query "laparoscopic inguinal hernia repair AND open inguinal hernia repair AND randomized"
+python -m jordilabor search --workspace $W --source europepmc     --query "laparoscopic inguinal hernia repair open inguinal hernia repair"
+python -m jordilabor search --workspace $W --source clinicaltrials --query "inguinal hernia repair laparoscopic"
+python -m jordilabor search --workspace $W --source openalex      --query "laparoscopic vs open inguinal hernia repair"
 
 # 2. Deduplicación determinista (DOI/PMID exacto + título difuso)
-python -m freemdlabor dedup --workspace $W
+python -m jordilabor dedup --workspace $W
 
 # 3. Cribado doble pase (requiere GOOGLE_API_KEY o GROQ_API_KEY)
-python -m freemdlabor screen title-abstract --workspace $W --pass pass_a
-python -m freemdlabor screen title-abstract --workspace $W --pass pass_b
-python -m freemdlabor screen kappa          --workspace $W
-python -m freemdlabor screen conflicts      --workspace $W   # -> screening/conflicts_title_abstract.csv
+python -m jordilabor screen title-abstract --workspace $W --pass pass_a
+python -m jordilabor screen title-abstract --workspace $W --pass pass_b
+python -m jordilabor screen kappa          --workspace $W
+python -m jordilabor screen conflicts      --workspace $W   # -> screening/conflicts_title_abstract.csv
 
 # G2: resuelve cada conflicto a mano
-python -m freemdlabor screen resolve --workspace $W --record-id 42 --decision include --by "tu nombre"
-python -m freemdlabor gate approve G2 $W/screening/conflicts_title_abstract.csv --workspace $W --by "tu nombre"
+python -m jordilabor screen resolve --workspace $W --record-id 42 --decision include --by "Jordimg"
+python -m jordilabor gate approve G2 $W/screening/conflicts_title_abstract.csv --workspace $W --by "Jordimg"
 
 # 4. Elegibilidad a texto completo (uno a uno; el texto lo consigues tú o
 #    vía Europe PMC OA — full_text_url en el registro)
-python -m freemdlabor screen full-text --workspace $W --record-id 42 --full-text-file study42.txt
+python -m jordilabor screen full-text --workspace $W --record-id 42 --full-text-file study42.txt
 
 # 5. Extracción a esquema fijo — edita extraction/schema.json ANTES de esto
-python -m freemdlabor extract run    --workspace $W --record-id 42 --full-text-file study42.txt
-python -m freemdlabor extract export --workspace $W    # -> extraction/studies.csv
+python -m jordilabor extract run    --workspace $W --record-id 42 --full-text-file study42.txt
+python -m jordilabor extract export --workspace $W    # -> extraction/studies.csv
 
 # G3: verifica el 20% de las celdas contra el PDF original
-python -m freemdlabor extract verify --workspace $W --record-id 42 --field n_intervention --by "tu nombre"
-python -m freemdlabor gate approve G3 $W/extraction/studies.csv --workspace $W --by "tu nombre"
+python -m jordilabor extract verify --workspace $W --record-id 42 --field n_intervention --by "Jordimg"
+python -m jordilabor gate approve G3 $W/extraction/studies.csv --workspace $W --by "Jordimg"
 
 # 6. Recuento y diagrama PRISMA 2020 (siempre desde la base, nunca a mano)
-python -m freemdlabor prisma --workspace $W --title "Lap vs open appendectomy"
+python -m jordilabor prisma --workspace $W --title "TAPP/TEP vs Lichtenstein — hernia inguinal"
 
 # 7. Metaanálisis en R
 Rscript analysis/meta_analysis.R \
   --input=$W/extraction/studies.csv \
-  --outcome=surgical_site_infection \
+  --outcome=chronic_pain \
   --measure=OR \
   --out-dir=$W/analysis
 
 # 8. Redacción del manuscrito (main.tex) — ver .claude/commands/writeup.md
 #    Cada cifra que escribas lleva un \provenance{claim_id} y un registro:
-python -m freemdlabor integrity add-provenance --workspace $W \
-  --claim-id ssi_or --value "OR 0.62 (95% CI 0.44-0.87)" \
-  --source-table analysis --source-ref "results_surgical_site_infection.json:estimate_exp"
+python -m jordilabor integrity add-provenance --workspace $W \
+  --claim-id chronic_pain_or --value "OR 0.62 (95% CI 0.44-0.87)" \
+  --source-table analysis --source-ref "results_chronic_pain.json:estimate_exp"
 
 # 9. Integridad — falla duro si algo no resuelve. Ejecuta ANTES de compilar.
-python -m freemdlabor integrity resolve-citations --bib $W/manuscript/references.bib
-python -m freemdlabor integrity check-provenance   --workspace $W --manuscript $W/manuscript/main.tex
+python -m jordilabor integrity resolve-citations --bib $W/manuscript/references.bib
+python -m jordilabor integrity check-provenance   --workspace $W --manuscript $W/manuscript/main.tex
 
 # G4/G5: interpretación y firma — puertas de conversación, no de script.
-python -m freemdlabor gate approve G5 $W/manuscript/main.tex --workspace $W --by "tu nombre"
+python -m jordilabor gate approve G5 $W/manuscript/main.tex --workspace $W --by "Jordimg"
 ```
 
 ## Coste y cuota
