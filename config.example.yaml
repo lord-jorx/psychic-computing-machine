@@ -1,0 +1,57 @@
+# freeMDlabor — per-role model routing.
+#
+# Copy to config.yaml (per-workspace, or at repo root as the default) and
+# adjust. See PLAN.md §3 for the reasoning behind this split, and
+# providers.py for the hard rule this file feeds: a role on a `free` tier
+# can NEVER be called with data_sensitivity="restricted" (patient-level
+# rows) — that call raises instead of silently sending data to a provider
+# whose free tier trains on it.
+
+roles:
+  # High-volume, mechanical: title/abstract screening of a few thousand
+  # records. Put this on a free tier — it's exactly what free tiers are
+  # for. NEVER point this at restricted data.
+  screening:
+    provider: gemini          # gemini | groq | openai | anthropic
+    model: gemini-2.5-flash
+    tier: free
+    max_data_sensitivity: public
+
+  # Medium-volume, higher stakes: pulling 30-50 fields out of ~60 full
+  # texts, each cell with a source quote. Still fine on a free tier for
+  # PUBLIC literature; bump to a paid/no-retention provider (or run it
+  # interactively) the moment you're extracting from anything
+  # patient-level.
+  extraction:
+    provider: gemini
+    model: gemini-2.5-pro
+    tier: free
+    max_data_sensitivity: public
+
+  # Low-volume, high-judgment: protocol design, risk-of-bias reasoning,
+  # interpretation, discussion, compliance review. This is NOT meant to be
+  # called programmatically — it's what you do inside Claude Code itself
+  # (Claude Pro's actual usage path; see PLAN.md §1.2). providers.py raises
+  # InteractiveRoleError if code tries to call this role directly.
+  judgment:
+    provider: interactive
+    model: null
+    tier: interactive
+    max_data_sensitivity: restricted   # a human is directly in the loop here
+
+  # Dedup, PRISMA counts, meta-analysis: no LLM, ever. Present here mainly
+  # so nothing accidentally routes these steps through an LLM later.
+  deterministic:
+    provider: deterministic
+    model: null
+    tier: none
+    max_data_sensitivity: restricted
+
+# Optional, but recommended: identifies you to NCBI/Crossref/OpenAlex's
+# "polite pool" for higher, more reliable rate limits. Can also be set via
+# the NCBI_CONTACT_EMAIL env var.
+# contact_email: you@example.org
+
+dedup_title_threshold: 92        # rapidfuzz token_sort_ratio, 0-100
+screening_batch_size: 20         # records per screening LLM call
+screening_kappa_threshold: 0.6   # below this, cli.py `screen kappa` warns loudly

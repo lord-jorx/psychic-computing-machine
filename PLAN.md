@@ -1,9 +1,10 @@
 # freeMDlabor — Plan de adaptación de `freephdlabor` a investigación médico-quirúrgica
 
-> Estado: **plan, sin código aplicado**.
+> Estado: **implementado — núcleo determinista de la Vía A (F0-F1 y parte de F2 del §10)**.
 > Base auditada: [`ltjed/freephdlabor`](https://github.com/ltjed/freephdlabor) @ `main` (clonado y revisado fichero a fichero).
 > Restricción de partida: ejecutable con **cuenta Claude Pro** o con **APIs gratuitas**.
 > Versión navegable: https://claude.ai/code/artifact/9d079ec0-5c0c-4b41-b49f-78e43474775d
+> Código: [`freemdlabor/`](freemdlabor/) (paquete Python), [`analysis/meta_analysis.R`](analysis/meta_analysis.R), [`.claude/commands/`](.claude/commands/) — ver [`README.md`](README.md) para el arranque.
 
 ---
 

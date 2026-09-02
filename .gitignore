@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Secrets / local config
+.env
+config.yaml
+
+# Review workspaces — these contain a specific review's data (search
+# results, screening decisions, extracted data, the manuscript) and don't
+# belong in this repo unless you deliberately want to version one.
+results/
+
+# R
+.Rhistory
+.RData
